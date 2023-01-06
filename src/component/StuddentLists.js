@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../config";
+import StudentItem from "./StudentItem";
 
 const UserLists = () => {
     const [students, setStudents] = useState([]);
@@ -37,18 +38,7 @@ const UserLists = () => {
                 </thead>
                 <tbody>
                     {students.map((student, i) => (
-                        <tr key={student.id}>
-                            <td className="no">{i}</td>
-                            <td>{student.name}</td>
-                            <td>{student.address}</td>
-                            <td>{student.major}</td>
-                            <td className="action">
-                                <button className="btn btn-delete">
-                                    Delete
-                                </button>
-                                <button className="btn btn-edit">Edit</button>
-                            </td>
-                        </tr>
+                        <StudentItem key={i} student={student} no={i + 1} />
                     ))}
                 </tbody>
             </table>
