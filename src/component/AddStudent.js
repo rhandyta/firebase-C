@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../config";
 
 const AddStudent = () => {
+    const navigate = useNavigate();
     const initialValues = {
         name: "",
         email: "",
@@ -23,8 +26,16 @@ const AddStudent = () => {
             .matches(/^[0-9]+$/, "phone number is not valid"),
     });
 
-    const onSubmit = (props) => {
-        console.log(props);
+    const onSubmit = async (values, props) => {
+        await addDoc(collection(db, "students"), {
+            name: values.name,
+            email: values.email,
+            address: values.address,
+            major: values.major,
+            telp: values.telp,
+        });
+        navigate("/");
+        props.setSubmitting(false);
     };
 
     return (
@@ -116,7 +127,7 @@ const AddStudent = () => {
                                     className="input"
                                     name="major"
                                 >
-                                    <option>--Pilih Jurusan--</option>
+                                    <option value="">--Pilih Jurusan--</option>
                                     <option>Informatika</option>
                                     <option>Kimia</option>
                                     <option>Industri</option>
@@ -145,8 +156,14 @@ const AddStudent = () => {
                                     )}
                                 </ErrorMessage>
                             </div> */}
-                            <button type="submit" className="btn btn-add-form">
-                                Tambahkan
+                            <button
+                                type="submit"
+                                className="btn btn-add-form"
+                                disabled={!props.isValid || props.isSubmitting}
+                            >
+                                {props.isSubmitting
+                                    ? "Please Wait..."
+                                    : "Submit"}
                             </button>
                             <Link to={"/"} className="btn btn-back-form">
                                 Kembali

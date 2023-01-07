@@ -120,3 +120,7 @@ td.no,
     font-size: small;
     color: red;
 }
+
+button[disabled] {
+    background-color: gray;
+}
