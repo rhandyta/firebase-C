@@ -1,23 +1,39 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import { db } from "../config";
 import StudentItem from "./StudentItem";
 
 const UserLists = () => {
     const [students, setStudents] = useState([]);
 
-    const fetchStudent = async () => {
-        const querySnapshot = await getDocs(collection(db, "students"));
-        let tempStudents = [];
-        querySnapshot.forEach((doc) => {
-            tempStudents.push({ id: doc.id, ...doc.data() });
-        });
-        setStudents(tempStudents);
-    };
+    // const fetchStudent = async () => {
+    //     const querySnapshot = await getDocs(collection(db, "students"));
+    //     let tempStudents = [];
+    //     querySnapshot.forEach((doc) => {
+    //         tempStudents.push({ id: doc.id, ...doc.data() });
+    //     });
+    //     setStudents(tempStudents);
+    // };
 
     useEffect(() => {
-        fetchStudent();
+        // fetchStudent();
+
+        const unsubcribe = onSnapshot(
+            collection(db, "students"),
+            (snapshot) => {
+                let tempStudents = [];
+                snapshot.docs.forEach((doc) => {
+                    tempStudents.push({ id: doc.id, ...doc.data() });
+                });
+                setStudents(tempStudents);
+            },
+            (error) => console.log(error)
+        );
+
+        return () => {
+            unsubcribe();
+        };
     }, []);
 
     return (
