@@ -1,11 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config";
 
 const Login = () => {
+    const navigate = useNavigate();
     const initialValues = {
         email: "",
         password: "",
@@ -17,18 +18,19 @@ const Login = () => {
     });
 
     const onSubmit = async (values) => {
-        await createUserWithEmailAndPassword(
-            auth,
-            values.email,
-            values.password
-        )
+        await signInWithEmailAndPassword(auth, values.email, values.password)
             .then((res) => {
                 const user = res.user;
                 console.log(user);
             })
             .catch((error) => {
                 const errorCode = error.code;
-                const errorMessage = error.message;
+                if (errorCode == "auth/user-not-found") {
+                    alert("Email not found");
+                }
+                if (errorCode == "auth/wrong-password") {
+                    alert("Wrong Password");
+                }
             });
     };
     return (
@@ -79,6 +81,7 @@ const Login = () => {
                                 </div>
                             </div>
                             <button
+                                type="submit"
                                 className="btn btn-add"
                                 disabled={!props.isValid || props.isSubmitting}
                             >
