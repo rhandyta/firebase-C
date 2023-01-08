@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
-import { db } from "../config";
+import { collection, onSnapshot } from "firebase/firestore";
+import { auth, db } from "../config";
 import StudentItem from "./StudentItem";
+import { useDispatch } from "react-redux";
+import { logout } from "../features/userSlice";
+import { signOut } from "firebase/auth";
 
 const UserLists = () => {
     const [students, setStudents] = useState([]);
-
+    const dispatch = useDispatch();
     // const fetchStudent = async () => {
     //     const querySnapshot = await getDocs(collection(db, "students"));
     //     let tempStudents = [];
@@ -36,12 +39,23 @@ const UserLists = () => {
         };
     }, []);
 
+    const logoutHandler = () => {
+        dispatch(logout());
+    };
+
     return (
         <>
             <h1>Daftar Mahasiswa</h1>
             <Link to={"/add"} className="btn btn-add">
                 Tambah
             </Link>
+            <button
+                className="btn btn-add"
+                type="button"
+                onClick={logoutHandler}
+            >
+                Logout
+            </button>
             <table className="customTable">
                 <thead>
                     <tr>

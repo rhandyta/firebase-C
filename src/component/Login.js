@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import { login } from "../features/userSlice";
 
 const Login = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const initialValues = {
         email: "",
@@ -25,7 +24,6 @@ const Login = () => {
             .then((res) => {
                 const user = res.user;
                 dispatch(login(user));
-                console.log(user);
             })
             .catch((error) => {
                 const errorCode = error.code;
