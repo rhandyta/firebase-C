@@ -4,9 +4,12 @@ import { Form, Formik, Field, ErrorMessage } from "formik";
 import * as yup from "yup";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config";
+import { useDispatch } from "react-redux";
+import { login } from "../features/userSlice";
 
 const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const initialValues = {
         email: "",
         password: "",
@@ -21,6 +24,7 @@ const Login = () => {
         await signInWithEmailAndPassword(auth, values.email, values.password)
             .then((res) => {
                 const user = res.user;
+                dispatch(login(user));
                 console.log(user);
             })
             .catch((error) => {

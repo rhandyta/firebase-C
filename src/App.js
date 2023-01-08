@@ -8,17 +8,15 @@ import UpdateStudent from "./component/UpdateStudent";
 
 function App() {
     return (
-        <BrowserRouter>
-            <main className="card">
-                <Routes>
-                    <Route path="/" element={<UserLists />} />
-                    <Route path="add" element={<AddStudent />} />
-                    <Route path="update/:id" element={<UpdateStudent />} />
-                    <Route path="register" element={<Register />} />
-                    <Route path="login" element={<Login />} />
-                </Routes>
-            </main>
-        </BrowserRouter>
+        <main className="card">
+            <Routes>
+                <Route path="/" element={<UserLists />} />
+                <Route path="add" element={<AddStudent />} />
+                <Route path="update/:id" element={<UpdateStudent />} />
+                <Route path="register" element={<Register />} />
+                <Route path="login" element={<Login />} />
+            </Routes>
+        </main>
     );
 }
 
